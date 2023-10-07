@@ -1,9 +1,11 @@
 package com.itainplace.springnblog.controller;
 
+import com.itainplace.springnblog.dto.LoginRequest;
 import com.itainplace.springnblog.dto.RegisterRequest;
+import com.itainplace.springnblog.dto.RegisterResponse;
+import com.itainplace.springnblog.dto.TokenResponse;
 import com.itainplace.springnblog.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +18,18 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody RegisterRequest registerRequest){
-        authService.signup(registerRequest);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<RegisterResponse> signup(@RequestBody RegisterRequest registerRequest){
+        RegisterResponse response = authService.signup(registerRequest);
+        return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest){
+        System.out.println("uytyugyugg");
+        return ResponseEntity.ok(authService.login(loginRequest));
+    }
+
+
 }

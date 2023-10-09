@@ -39,6 +39,24 @@ public class JwtService {
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
+
+    public boolean validationToken(String token) {
+        Jwts.parser()
+                .setSigningKey(getSigningKey()) //Sets the signing key used to verify any discovered JWS digital signature.
+                .build()                //Returns an immutable/thread-safe JwtParser created from the configuration from this JwtParserBuilder.
+                .parseClaimsJws(token);
+        return true;
+    }
+
+    public String getUsernameFromJWT(String token){
+       Claims claims =  Jwts.parser()
+                            .setSigningKey(getSigningKey()) //Sets the signing key used to verify any discovered JWS digital signature.
+                            .build()                //Returns an immutable/thread-safe JwtParser created from the configuration from this JwtParserBuilder.
+                            .parseClaimsJws(token)//Parses the specified compact serialized JWT string based on the builder's current configuration state and returns the resulting unsigned plaintext JWT instance.
+                            .getBody();
+       return claims.getSubject();
+    }
+
     // 	getSubject() Returns the JWT sub (subject) value or null if not present.
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
